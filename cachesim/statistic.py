@@ -1,15 +1,30 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
-x = np.array([0.984484, 0.984502, 0.984528, 0.984529, 0.984524, 0.984507, 0.984519, 0.984518, 0.984513])
-cycle = np.array([24046024, 21372571, 18700224, 16029173, 13358261, 10687016, 8014828, 5343317, 2671768])
-cycle = cycle / np.max(cycle) # 归一化
-plt.plot(x, label="hit_rate")
-plt.xlabel("batch")
+hit_rate = []
+cycle = []
+
+with open('./log/hit_rate.txt', encoding='utf-8') as f1:
+  t = f1.readline()
+  while t:
+    hit_rate.append(t.strip('\n'))
+    t = f1.readline()
+print(hit_rate)
+
+with open('./log/cycle.txt', encoding='utf-8') as f2:
+  t = f2.readline()
+  while t:
+    cycle.append(t.strip('\n'))
+    t = f2.readline()
+print(cycle)
+
+plt.plot(hit_rate, label="hit_rate")
+plt.xlabel("iter")
+plt.ylabel("hit_rate")
 plt.legend()
 plt.show()
 
 plt.plot(cycle, label="cycle")
-plt.xlabel("batch")
+plt.xlabel("iter")
+plt.ylabel("cycle")
 plt.legend()
 plt.show()

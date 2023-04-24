@@ -2,6 +2,9 @@
 #include <time.h>
 #include <unistd.h>
 
+FILE *fd1;
+FILE *fd2;
+
 uint32_t cpu_read(uintptr_t addr, int len);
 void cpu_write(uintptr_t addr, int len, uint32_t data);
 uint32_t cpu_uncache_read(uintptr_t addr, int len);
@@ -126,6 +129,9 @@ void replay_trace(void) {
 int main(int argc, char *argv[]) {
   parse_args(argc, argv);
 
+  fd1 = fopen("./log/hit_rate.txt", "w");
+  fd2 = fopen("./log/cycle.txt", "w");
+
   init_rand(seed);
 
   int batch = 14 - BLOCK_WIDTH;
@@ -141,6 +147,9 @@ int main(int argc, char *argv[]) {
 
     batch--;
   }
+
+  fclose(fd1);
+  fclose(fd2);
 
   return 0;
 }

@@ -1,6 +1,9 @@
 #include "common.h"
 #include <inttypes.h>
 
+extern FILE *fd1;
+extern FILE *fd2;
+
 typedef struct {
   bool valid;
   bool dirty;
@@ -136,7 +139,10 @@ void init_cache(int total_size_width, int associativity_width) {
 
 void display_statistic(void) {
   //printf("\nstatistic:\n");
+  double hit_rate = hit_num/ 1.0 / (miss_num + hit_num);
   printf("(%d %d %d) ", entry_num, set_num, set_size);
   printf("total=%ld, hit=%ld, miss=%ld, ", miss_num + hit_num, hit_num, miss_num);
-  printf("hit_rate=%f, cycle=%ld\n", hit_num/ 1.0 / (miss_num + hit_num), cycle_cnt);
+  printf("hit_rate=%f, cycle=%ld\n", hit_rate, cycle_cnt);
+  fprintf(fd1, "%lf\n", hit_rate);
+  fprintf(fd2, "%ld\n", cycle_cnt);
 }
