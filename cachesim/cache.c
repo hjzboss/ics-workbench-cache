@@ -33,8 +33,8 @@ static uint32_t get_bit(uint32_t data, int lo, int hi) {
   return (data >> lo) & ~(0xffffffff << (hi - lo + 1));
 }
 
-// cache替换算法：随机替换
-static cache_entry* cache_replace(uint32_t set_no, uintptr_t addr) {
+// cache替换算法
+static cache_entry* random_replace(uint32_t set_no, uintptr_t addr) {
   assert(set_no >= 0 && set_no < set_num);
   int r = rand() % set_size; // 随机生成下标
   cache_entry e = cache[set_no][r];
@@ -74,8 +74,8 @@ uint32_t cache_read(uintptr_t addr) {
   }
   if (!hit) {
     miss_num++;
-    // cache替换算法：随机替换
-    cache_entry *t = cache_replace(index, addr);
+    // cache替换算法
+    cache_entry *t = random_replace(index, addr);
     assert(t);
     data = *(uint32_t *)(t->data + offset);
   }
@@ -105,7 +105,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 
   if (!hit) {
     miss_num++;
-    cache_entry *t = cache_replace(index, addr);
+    cache_entry *t = random_replace(index, addr);
     assert(t);
     uint32_t old_data = *(uint32_t *)(t->data + offset);
     *(uint32_t *)(t->data + offset) = (old_data & ~wmask) | (data & wmask);
@@ -117,7 +117,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 例如 init_cache(14, 2) 将初始化一个 16KB，4 路组相联的cache
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
-  miss_num = hit_num = 0;
+  miss_num = hit_num = cycle_cnt = 0;
   entry_num = exp2(total_size_width - BLOCK_WIDTH);
   set_size = exp2(associativity_width);
   set_num = entry_num / set_size;

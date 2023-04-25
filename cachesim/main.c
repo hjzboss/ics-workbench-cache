@@ -134,12 +134,12 @@ int main(int argc, char *argv[]) {
 
   init_rand(seed);
 
-  int batch = 14 - BLOCK_WIDTH;
+  int batch = CACHE_SIZE - BLOCK_WIDTH;
 
   while (batch >= 0) {
     init_mem();
 
-    init_cache(14, batch);
+    init_cache(CACHE_SIZE, batch);
 
     replay_trace();
 

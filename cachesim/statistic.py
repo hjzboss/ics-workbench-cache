@@ -1,3 +1,4 @@
+#!/home/hjz/anaconda3/envs/pytorch64/bin/python3
 import matplotlib.pyplot as plt
 import numpy as np
 

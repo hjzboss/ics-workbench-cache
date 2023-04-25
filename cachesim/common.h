@@ -9,6 +9,7 @@
 #define exp2(x) (1 << (x))
 #define mask_with_len(x) (exp2(x) - 1)
 
+#define CACHE_SIZE 14
 #define MEM_WIDTH 25
 #define MEM_SIZE (1 << MEM_WIDTH) // 1MB
 #define BLOCK_WIDTH  6  // 64B
