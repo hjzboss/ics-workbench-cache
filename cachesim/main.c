@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 FILE *fd1;
-FILE *fd2;
+//FILE *fd2;
 
 uint32_t cpu_read(uintptr_t addr, int len);
 void cpu_write(uintptr_t addr, int len, uint32_t data);
@@ -130,26 +130,33 @@ int main(int argc, char *argv[]) {
   parse_args(argc, argv);
 
   fd1 = fopen("./log/hit_rate.txt", "w");
-  fd2 = fopen("./log/cycle.txt", "w");
 
-  init_rand(seed);
+  int iter_num = 20;
 
-  int batch = CACHE_SIZE - BLOCK_WIDTH;
+  fprintf(fd1, "%d\n", iter_num);
+  fprintf(fd1, "%d\n", CACHE_SIZE - BLOCK_WIDTH + 1);
 
-  while (batch >= 0) {
-    init_mem();
+  while (iter_num > 0) {
+    init_rand(iter_num);
 
-    init_cache(CACHE_SIZE, batch);
+    int batch = CACHE_SIZE - BLOCK_WIDTH;
 
-    replay_trace();
+    while (batch >= 0) {
+      init_mem();
 
-    display_statistic();
+      init_cache(CACHE_SIZE, batch);
 
-    batch--;
+      replay_trace();
+
+      display_statistic();
+
+      batch--;
+    }
+
+    iter_num--;
   }
 
   fclose(fd1);
-  fclose(fd2);
 
   return 0;
 }
